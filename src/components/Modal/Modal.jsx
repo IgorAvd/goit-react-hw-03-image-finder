@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import * as basicLightbox from 'basiclightbox';
-import { ModalImage, Overlay } from './Modal.stuled';
+import { ModalImage, Overlay } from './Modal.styled';
 
 export class Modal extends Component {
-  openModal = () => {
-    const { largeImageURL } = this.props;
-    const instance = basicLightbox.create(`
-      <img src="${largeImageURL}" alt="Large"  />
-    `);
-  };
+  componentDidMount() {
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', this.handleKeyPress);
+  }
+
+  componentWillUnmount() {
+    document.body.style.overflow = 'auto';
+    window.removeEventListener('keydown', this.handleKeyPress);
+  }
 
   handleCloseModal = e => {
     if (e.target === e.currentTarget) {
@@ -22,23 +24,13 @@ export class Modal extends Component {
     }
   };
 
-  componentDidMount() {
-    document.body.style.overflow = 'hidden';
-    window.addEventListener('keydown', this.handleKeyPress);
-  }
-
-  componentWillUnmount() {
-    document.body.style.overflow = 'auto';
-    window.removeEventListener('keydown', this.handleKeyPress);
-  }
-
   render() {
-    const { largeImageURL } = this.props;
+    const { image } = this.props;
 
     return (
       <Overlay onClick={this.handleCloseModal}>
-        <ModalImage onClick={this.openModal}>
-          <img src={largeImageURL} alt="Large" />
+        <ModalImage>
+          <img src={image.largeImageURL} alt={image.tags} />
         </ModalImage>
       </Overlay>
     );
