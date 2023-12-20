@@ -11,6 +11,7 @@ export class App extends Component {
     loading: false,
     totalHits: null,
   };
+
   componentDidUpdate(_, prevState) {
     if (
       this.state.page !== prevState.page ||
@@ -41,12 +42,13 @@ export class App extends Component {
   };
 
   onSubmit = searchText => {
-    this.setState({ searchText, images: [], page: 1 });
+    if (this.state.searchText !== searchText) {
+      this.setState({ searchText, images: [], page: 1 });
+    }
   };
 
   render() {
     const { searchText, images, loading, totalHits, page } = this.state;
-
     return (
       <>
         <Searchbar onSubmit={this.onSubmit} />
